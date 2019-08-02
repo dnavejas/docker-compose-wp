@@ -11,4 +11,4 @@ def index():
         redis.rpush("students", {"name": name})
         return jsonify({"name": name})
     if request.method == "GET":
-        return jsonify(redis.lrange("students", 0, ))
+        return jsonify(redis.lrange("students", 0))

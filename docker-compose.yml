@@ -1,16 +1,33 @@
 version: "3"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - PYTHON_VERSION=3.7.0-alpine3.8
-    image: takacsmark/flask-redis:1.0
-    enviroment:
-      - FLASK_ENV=development
+  wordpress:
+    image: wordpress:4.9.4-php7.2-apache
+    environment:
+      - WORDPRESS_DB_USER=wp_user
+      - WORDPRESS_DB_PASSWORD=wp_password
     ports:
-      - 80:5000
-  redis:
-    image: redis:4.0.11-alpine
+      - 8080:80
+    networks:
+      - wordpressnet
+    volumes:
+      - wordpressdata:var/www/html
+  mysql:
+    image: mariadb:10.3.3
+    environment:
+      - MYSQL_ROOT_PASSWORD=db_password
+      - MYSQL_USER=wp_user
+      - MYSQL_PASSWORD=wp_password
+      - MYSQL_DATABASE=wordpress
+    networks:
+      - wordpressnet
+    volumes:
+      - mariadbdata:/var/lib/mysql
+
+networks:
+  wordpressnet:
+    driver: bridge
+
+volumes:
+  wordpressdata:
+  mariadbdata:
