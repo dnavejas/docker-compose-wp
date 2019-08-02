@@ -11,7 +11,7 @@ services:
     networks:
       - wordpressnet
     volumes:
-      - wordpressdata:var/www/html
+      - wordpressdata:/var/www/html
   mysql:
     image: mariadb:10.3.3
     environment:
